@@ -1,0 +1,21 @@
+name: Deploy RDP Server
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up and start RDP server
+      run: |
+        sudo apt update
+        sudo apt install -y xrdp xfce4 xfce4-goodies tightvncserver
+        sudo systemctl start xrdp
+        sudo systemctl enable xrdp
+        echo xfce4-session >~/.xsession
+        sudo service xrdp restart
+        sudo ufw allow 3389/tcp
